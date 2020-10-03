@@ -1,0 +1,44 @@
+La classe Maze effectue :
+- la création des éléments inamovibles du labyrinthe (murs, sol, entrée, sortie), à partir du fichier maze.txt.
+  Le départ est placé aléatoirement.
+  Les éléments inamovibles sur lesquels un déplacement peut être effectués (donc tout sauf les murs) sont stockés dans
+  un dictionnaire dont la clé est la position et le contenu le type d'élément (1). Ce dictionnaire réprésente le
+  "chemin libre"
+- la création d'élements "mobiles" (le gardien, MacGyver, le tube, l'aiguille, l'éther).
+  On indique leur position : celle du gardien est celle de la sortie, celle de MacGyer est celle de l'entrée, celle
+  de l'aiguille, du tube et de l'éther placé  ou de façon aléatoire, en vérifiant que l'emplacement n'est pas déjà pris
+  par un élément mobile.
+  Les élements mobiles sont stockés dans un dictionnaire ayant comme clé le type d'élément et comme contenu un objet
+  ayant comme modéle la classe Character pour le gardien et MacGyver ou la classe Collectable pour les éléments à
+  collecter.
+- la gestion des déplacements dans le labyrinthe
+
+La classe MazeWindow effectue :
+- l'initialisation d'une fenêtre pygame
+- le chargement des images des éléments utilisés dans le labyrinthe, stockées par type d'élement
+- le balayage du chemin libre pour en trouver le type d'élement, lequel permet d'afficher l'image correspondante
+- l'affichage de la fenêtre
+- la surveillance des évenements clavier, lesquels permettent de déplacer MacGyver. La gestion de ce déplacement est
+  assurée dans la classe Maze, à partir des éléments de la Classe Movable (classes filles : Character et Collectable).
+
+La classe Movable effectue :
+- le stockage de la position
+
+La classe Character, fille de Movable, effectue :
+- le déplacement de la position
+
+La classe Collectable, fille de Movable, effectue :
+- l'initialisation d'un compteur, attribut de cette classe
+- l'incrémnetation de ce compteur (appelé quand MacGyver collecte l'item)
+- le retour de si la collecte est finie ou pas (compteur => nombre d'items collectés = nombre à collecter)
+
+
+
+
+
+
+
+
+
+(1) Type d'élément :
+    A = Aether, B = Begin, E = Exit, G = Guardian, M = MacGyver, N = Needle, T = Tube, W = Wall, . = sol
