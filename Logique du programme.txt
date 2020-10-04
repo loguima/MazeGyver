@@ -11,7 +11,7 @@ La classe Maze effectue :
   Les élements mobiles sont stockés dans un dictionnaire ayant comme clé le type d'élément et comme contenu un objet
   ayant comme modéle la classe Character pour le gardien et MacGyver ou la classe Collectable pour les éléments à
   collecter.
-- la gestion des déplacements dans le labyrinthe
+- la gestion des déplacements des éléments mobiles dans le labyrinthe
 
 La classe MazeWindow effectue :
 - l'initialisation d'une fenêtre pygame
@@ -42,3 +42,5 @@ La classe Collectable, fille de Movable, effectue :
 
 (1) Type d'élément :
     A = Aether, B = Begin, E = Exit, G = Guardian, M = MacGyver, N = Needle, T = Tube, W = Wall, . = sol
+
+

@@ -4,10 +4,13 @@
 import pygame
 from pygame.locals import *
 
+from Constantes import *
+
 pygame.init()
 
 
 class MazeWindow:
+    """ Draw what give the maze object, i.e. the kind of items and their positions"""
 
     def __init__(self, maze, width_picture, height_picture):
         """ Initialize the elements necessary for what will be visible and display it """
@@ -38,12 +41,15 @@ class MazeWindow:
                     key = "W"
                 else:
                     key = self.maze.free_way[(x, y)]
-                self.window.blit(self.images[key], (x * self.width_picture, y * self.height_picture))
+                self.blit(key, x, y)
+
+    def blit(self, key, x, y):
+        self.window.blit(self.images[key], (x * self.width_picture, y * self.height_picture))
 
     def add_movable_pictures(self):
         for key in self.maze.movable:
             (x, y) = self.maze.movable[key].position
-            self.window.blit(self.images[key], (x * self.width_picture, y * self.height_picture))
+            self.blit(key, x, y)
 
     def display(self):
         pygame.display.set_icon(self.images["M"])
@@ -60,31 +66,42 @@ class MazeWindow:
                     loop = False
                 elif event.type == KEYDOWN:
                     if event.key == K_UP:
-                        loop = self.move((0, -1))
+                        loop = self.move_macgyver((0, -1))
                     if event.key == K_DOWN:
-                        loop = self.move((0, 1))
+                        loop = self.move_macgyver((0, 1))
                     if event.key == K_LEFT:
-                        loop = self.move((-1, 0))
+                        loop = self.move_macgyver((-1, 0))
                     if event.key == K_RIGHT:
-                        loop = self.move((1, 0))
+                        loop = self.move_macgyver((1, 0))
 
         pygame.quit()
 
-    def move(self, movement):
-        (status, old_position, new_position) = self.maze.move(movement)
-        if old_position == new_position:  # Try to move in a wall, nothing happens
+    def move_macgyver(self, movement):
+        (status, old_position, new_position) = self.maze.move_macgyver(movement)
+        if status == DONT_MOVE:  # Try to move in a wall, nothing happens
             return True
-        # !!! macgyver à faire bouger
-        if status == 1:  # Meeting with the guardian and no syringe
+        (x, y) = old_position
+        key = self.maze.free_way[old_position]
+        self.blit(key, x, y)
+        (x, y) = new_position
+        key = self.maze.free_way[new_position]
+        self.blit(key, x, y)
+        self.blit("M", x, y)
+
+        pygame.display.update()
+
+        if status == NO_SYRINGE:  # Meet guardian and haven't syringe
             self.kill()
             return False
-        if status == 2:  # Meeting with the guardian and syringe
+        if status == FILLED_SYRINGE:  # Meet guardian and have syringe
             self.win()
             return False
-        return True  # status == 0:   Movement in a free floor
+        return True  # status == 0:   Movement on free floor
 
     def kill(self):
+        print("kill")
         pass
 
     def win(self):
+        print("win")
         pass

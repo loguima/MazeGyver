@@ -3,25 +3,35 @@
 
 
 class Movable:
+    """ To create movable item """
 
     def __init__(self, kind, position):
         self.kind = kind
         self.position = position
+        self.is_collect = False
 
-class Collectable(Movable):
+
+class Syringe(Movable):
+    """ For collectable parts of syringe : Aether, Tube, Needle """
 
     count_collect = 0
 
     def collect(self):
-        self.count_collect = self.count_collect + 1
+        self.is_collect = True
+        self.add_collect()
+
+    @classmethod
+    def add_collect(cls):
+        cls.count_collect = cls.count_collect + 1
 
     @property
-    def is_complete(self):
-        if self.count_collect == 3:
+    @classmethod
+    def is_complete(cls):
+        if cls.count_collect == 3:
             return True
         return False
 
-class Character(Movable):
 
-    def change_position(self, position):
-        self.position = position
+class Character(Movable):
+    """ For character : MacGyver and Guardian (no yet used for him, just to preserve the future) """
+    pass
