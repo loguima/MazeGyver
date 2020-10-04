@@ -11,61 +11,51 @@ class Maze:
     """ Determine the content of the labyrinth, i.e. the kind of items and their positions """
 
     def __init__(self, size_x, size_y):
-        """ The maze have two parts : irremovable (wall, floor, ...) and movable (characters, items, ...)
-            The free_way dict contains the irremovable part where movable part can evoluate.
-            The movable dict contains what can move """
+        """ The maze have two parts : irremovable (wall, floor, ...) and movable (characters, items, ...)? """
+
         self.size_x = size_x
         self.size_y = size_y
-        self.free_way = {}
+        self.free_way = {}  # Contains the free way (no walls) where movable items can evoluate.
         self.create_irremovable_part()
-        self.movable = {}
+        self.movable = {}  # Contains the references of movable objects (object in the sense of Python).
         self.create_movable_part()
-        self.authorized_places = {}
+        self.authorized_places = {}  # Contains where next movable item can be place.
 
     def create_irremovable_part(self):
-        """ Transforms the content of the file into a dictionary, which contains: a position as key and a type of
-            elements. Positions do not apply to walls, it's the free way """
+        """ Transforms the content of the file into the dictionary "free_way". """
+
         with open("res/maze.txt", "r") as maze_file:
             y = 0
-            for line in maze_file:
-                x = 0
-                for column in line.strip():
-                    if column != "W" and column != "\n":
+            for y, line in enumerate(maze_file):
+                for x, column in enumerate(line.strip()):
+                    if column != "W":
                         self.free_way[(x, y)] = column
                         if column == "E":
                             exit_position = (x, y)
-                    x = x + 1
-                y = y + 1
 
-        # Begin's position is random, but not at exit's position
         loop = True
         while loop:
             position = self.give_random_position(self.free_way)
-            if position != exit_position:
+            if position != exit_position:  # Begin's position is random, but not at exit's position
                 loop = False
         self.free_way[position] = "B"
 
     def create_movable_part(self):
         """ Give position and create movable items """
-
-        # Where a new movable item can be placed
-        self.authorized_places = self.free_way.copy()
+        self.authorized_places = self.free_way.copy()  # Where a new movable item can be placed
 
         for position in self.free_way:
-            # Guardian's position is same as Exit
             if self.free_way[position] == "E":
-                self.create_character("G", position)
-            # MacGyver's position is same as Begin
+                self.create_character("G", position)  # Guardian's position is same as Exit
             elif self.free_way[position] == "B":
-                self.create_character("M", position)
+                self.create_character("M", position)  # MacGyver's position is same as Begin
 
-        # Random position for Needle, Tube, Aether
-        self.create_Syringe("N")
+        self.create_Syringe("N")  # Random position for Needle, Tube, Aether
         self.create_Syringe("T")
         self.create_Syringe("A")
 
     def give_random_position(self, authorized_places):
-        """ Give random position if free place 
+        """ Give random position if free place.
         :rtype: object
         :param authorized_places: 
         :return: 
@@ -103,11 +93,13 @@ class Maze:
         return status, old_position, new_position
 
     def check_guardian_proximity(self, new_position):
+        """ Check the guardian proximity. If near, check if syringe is complete """
         guardian = self.movable["G"]
         for (x, y) in {(0, 1), (0, -1), (1, 0), (-1, 0)}:
             position_to_test = (new_position[0] + x, new_position[1] + y)
             if position_to_test == guardian.position:
-                if Syringe.is_complete:
+                syringe = self.movable["A"]
+                if syringe.is_complete:
                     return FILLED_SYRINGE
                 else:
                     return NO_SYRINGE

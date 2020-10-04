@@ -25,9 +25,8 @@ class Syringe(Movable):
         cls.count_collect = cls.count_collect + 1
 
     @property
-    @classmethod
-    def is_complete(cls):
-        if cls.count_collect == 3:
+    def is_complete(self):
+        if self.count_collect == 3:
             return True
         return False
 
