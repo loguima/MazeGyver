@@ -32,5 +32,5 @@ class Syringe(Movable):
 
 
 class Character(Movable):
-    """ For character : MacGyver and Guardian (no yet used for him, just to preserve the future) """
+    """ For character : MacGyver and Guardian (not realy usefull, just for fun) """
     pass

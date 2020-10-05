@@ -25,7 +25,6 @@ class Maze:
         """ Transforms the content of the file into the dictionary "free_way". """
 
         with open("res/maze.txt", "r") as maze_file:
-            y = 0
             for y, line in enumerate(maze_file):
                 for x, column in enumerate(line.strip()):
                     if column != "W":

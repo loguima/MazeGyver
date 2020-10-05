@@ -5,7 +5,7 @@ from Maze import *
 from MazeWindow import *
 
 if __name__ == "__main__":
-    maze_window = MazeWindow(Maze(15, 15), 40, 40)
+    maze_window = MazeWindow(MazeDriver(15, 15), 40, 40)
     # key = kind of items / path / True if transparency image
     pictures_to_load = {"A": ("img/Aether.png", True), "B": ("img/Begin.png", True), "E": ("img/Exit.png", True),
                         "G": ("img/Guardian.png", True),"M": ("img/MacGyver.png", True),"N": ("img/Needle.png", True),
