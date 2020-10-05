@@ -3,7 +3,7 @@
 
 import random
 
-from Movable import Character, Syringe
+from Movable import Movable, Syringe
 from Constantes import *
 
 
@@ -35,7 +35,9 @@ class Maze:
         loop = True
         while loop:
             position = self.give_random_position(self.free_way)
-            if position != exit_position:  # Begin's position is random, but not at exit's position
+            # Begin's position is random, but not at the exit position.
+            # Otherwise the Guardian is on Begin and Mac on Start ==> Mac is immediately killed.
+            if position != exit_position:
                 loop = False
         self.free_way[position] = "B"
 
@@ -49,27 +51,23 @@ class Maze:
             elif self.free_way[position] == "B":
                 self.create_character("M", position)  # MacGyver's position is same as Begin
 
-        self.create_Syringe("N")  # Random position for Needle, Tube, Aether
-        self.create_Syringe("T")
-        self.create_Syringe("A")
+        self.create_syringe("N")  # Random position for Needle, Tube, Aether
+        self.create_syringe("T")
+        self.create_syringe("A")
 
     def give_random_position(self, authorized_places):
-        """ Give random position if free place.
-        :rtype: object
-        :param authorized_places: 
-        :return: 
-        """
+        """ Give random position if free place. """
         position = (random.randint(0, self.size_x - 1), random.randint(0, self.size_y - 1))
         if position not in authorized_places:
             return self.give_random_position(authorized_places)
         return position
 
     def create_character(self, kind, position):
-        """ To create a movable and to indicate that the place is not free for deposit other movable """
-        self.movable[kind] = Character(kind, position)
+        """ Create a movable and indicate that the place is not free for deposit other movable """
+        self.movable[kind] = Movable(kind, position)
         del self.authorized_places[position]
 
-    def create_Syringe(self, kind):
+    def create_syringe(self, kind):
         """ Give position, create a piece of Syringe and indicate that the place is not free """
         position = self.give_random_position(self.authorized_places)
         self.movable[kind] = Syringe(kind, position)
@@ -82,11 +80,11 @@ class Maze:
         new_position = (old_position[0] + movement[0], old_position[1] + movement[1])
         if not (new_position in self.free_way):
             return DONT_MOVE, old_position, old_position  # Wall : no possible movement
-        for key in self.movable:
-            if self.movable[key].position == new_position:
-                if isinstance(self.movable[key], Syringe):
-                    if not self.movable[key].is_collect:
-                        self.movable[key].collect()
+        for kind in self.movable:
+            if self.movable[kind].position == new_position:
+                if isinstance(self.movable[kind], Syringe):  # Piece of syringe
+                    if not self.movable[kind].is_collect:
+                        self.movable[kind].collect()
         macgyver.position = new_position
         status = self.check_guardian_proximity(new_position)
         return status, old_position, new_position

@@ -24,8 +24,6 @@ La classe MazeWindow effectue :
 La classe Movable effectue :
 - Le stockage de la position.
 
-La classe Character, fille de Movable, n'effectue rien, c'est pour créer des instances de cette classe.
-
 La classe Collectable, fille de Movable, effectue :
 - L'initialisation d'un compteur, attribut de cette classe;
 - l'incrémnetation de ce compteur (appelé quand MacGyver collecte l'item);

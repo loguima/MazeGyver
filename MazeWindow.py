@@ -36,7 +36,7 @@ class MazeWindow:
         return pygame.image.load(path).convert()
 
     def fill_with_pictures(self):
-        """ Fill with the pictures of irremovable part (wall, floor, exit, begin """
+        """ Fill with the pictures of irremovable part (wall, floor, exit, begin)"""
         for position in [(x, y) for x in range(self.maze.size_x) for y in range(self.maze.size_y)]:
             if position not in self.maze.free_way:
                 kind = "W"
@@ -93,7 +93,7 @@ class MazeWindow:
 
         kind = self.maze.free_way[new_position]
         self.blit(kind, new_position)  # Restore the soil if position was occupied by piece of syringe
-        self.blit("M", new_position)
+        self.blit("M", new_position)   # Place MacGyver
 
         pygame.display.update()
 
@@ -116,7 +116,7 @@ class MazeWindow:
         self.display_text(sentence)
 
     def win(self):
-        """ In case of victory? """
+        """ In case of victory """
         sentence = """Merci d'avoir joué\nau plus extraordinaire\njeu de l'histoire\ndu monde,\nde l'univers même !"""
 
         self.display_text(sentence)
