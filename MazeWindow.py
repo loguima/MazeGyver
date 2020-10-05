@@ -117,7 +117,7 @@ class MazeWindow:
 
     def win(self):
         """ In case of victory? """
-        sentence = """Merci d'avoir joué\nau plus extraordinaire\njeu de l'histoire.\nY compris les\njeux aliens"""
+        sentence = """Merci d'avoir joué\nau plus extraordinaire\njeu de l'histoire\ndu monde,\nde l'univers même !"""
 
         self.display_text(sentence)
 
