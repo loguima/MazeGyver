@@ -80,11 +80,16 @@ class Maze:
         new_position = (old_position[0] + movement[0], old_position[1] + movement[1])
         if not (new_position in self.free_way):
             return DONT_MOVE, old_position, old_position  # Wall : no possible movement
+        # Can't delete movable when iter, so set a flag and treat after if needed.
+        delete_movable = False
         for kind in self.movable:
             if self.movable[kind].position == new_position:
                 if isinstance(self.movable[kind], Syringe):  # Piece of syringe
-                    if not self.movable[kind].is_collect:
-                        self.movable[kind].collect()
+                    self.movable[kind].collect()
+                    delete_movable = True
+                    break  # Keep the good kind
+        if delete_movable:
+            del self.movable[kind]  # Delete syringe piece
         macgyver.position = new_position
         status = self.check_guardian_proximity(new_position)
         return status, old_position, new_position
@@ -95,8 +100,7 @@ class Maze:
         for (x, y) in {(0, 1), (0, -1), (1, 0), (-1, 0)}:
             position_to_test = (new_position[0] + x, new_position[1] + y)
             if position_to_test == guardian.position:
-                syringe = self.movable["A"]
-                if syringe.is_complete:
+                if Syringe.is_complete():
                     return FILLED_SYRINGE
                 else:
                     return NO_SYRINGE

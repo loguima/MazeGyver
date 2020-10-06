@@ -4,17 +4,16 @@
 
 Gére les positions, les déplacements, les élements (mobiles ou non).
 
-- Crée les éléments inamovibles du labyrinthe (murs, sol, entrée, sortie), à partir du fichier maze.txt;
+- Crée les éléments inamovibles du labyrinthe (murs, sol, entrée, sortie), à partir du fichier maze.txt.
   Le départ est placé aléatoirement.
   Les éléments inamovibles sur lesquels un déplacement peut être effectué (donc tout sauf les murs) sont stockés dans
   un dictionnaire dont la clé est la position et le contenu le type d'élément (1). Ce dictionnaire réprésente le
   "chemin libre".
 - Crée les élements "mobiles" (le gardien, MacGyver, le tube, l'aiguille, l'éther).
-  On indique leur position : celle du gardien est celle de la sortie, celle de MacGyer est celle de l'entrée, celle
-  de l'aiguille, du tube et de l'éther est placée de façon aléatoire, en vérifiant que l'emplacement n'est pas déjà pris
-  par un élément mobile.
+  On indique leur position : celle du gardien est celle de la sortie, celle de MacGyer est celle de l'entrée, celles
+  de l'aiguille, du tube et de l'éther sont placées de façon aléatoire, en vérifiant que l'emplacement est libre.
   Les élements mobiles sont stockés dans un dictionnaire ayant comme clé le type d'élément et comme contenu un objet
-  ayant comme modéle la classe Character pour le gardien et MacGyver ou la classe Collectable pour les éléments à
+  ayant comme modéle la classe Movable pour le gardien et MacGyver ou la classe Collectable pour les éléments à
   collecter.
 - Gére les déplacements des éléments mobiles dans le labyrinthe.
 
