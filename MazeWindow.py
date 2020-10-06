@@ -93,7 +93,7 @@ class MazeWindow:
 
         kind = self.maze.free_way[new_position]
         self.blit(kind, new_position)  # Restore the soil if position was occupied by piece of syringe
-        self.blit("M", new_position)   # Place MacGyver
+        self.blit("M", new_position)  # Place MacGyver
 
         pygame.display.update()
 
@@ -123,14 +123,14 @@ class MazeWindow:
 
     def display_text(self, sentence):
         """ Display a text at the center of the window """
-        police = pygame.font.Font("res/SF Slapstick Comic Shaded.ttf",42)
+        police = pygame.font.Font("res/SF Slapstick Comic Shaded.ttf", 42)
         text_count = len(sentence.splitlines())
         for x, text in enumerate(sentence.splitlines()):
             text = police.render(text, 1, (50, 50, 50))
             text_height = text.get_height() + 10
             position = text.get_rect()
             position.centerx = self.window.get_rect().centerx
-            position.centery = self.window.get_rect().centery + (x*text_height) - ((text_count-1)*text_height)/2
+            position.centery = self.window.get_rect().centery + (x * text_height) - ((text_count - 1) * text_height) / 2
             self.window.blit(text, position)
         pygame.display.update()
         loop = True

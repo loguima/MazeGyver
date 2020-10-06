@@ -64,13 +64,13 @@ class Maze:
 
     def create_character(self, kind, position):
         """ Create a movable and indicate that the place is not free for deposit other movable """
-        self.movable[kind] = Movable(kind, position)
+        self.movable[kind] = Movable(position)
         del self.authorized_places[position]
 
     def create_syringe(self, kind):
         """ Give position, create a piece of Syringe and indicate that the place is not free """
         position = self.give_random_position(self.authorized_places)
-        self.movable[kind] = Syringe(kind, position)
+        self.movable[kind] = Syringe(position)
         del self.authorized_places[position]
 
     def move_macgyver(self, movement):

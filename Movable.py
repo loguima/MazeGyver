@@ -5,17 +5,19 @@
 class Movable:
     """ Create movable item """
 
-    def __init__(self, kind, position):
-        """ Principaly to manage position """
-        self.kind = kind
+    def __init__(self, position):
+        """ Store position """
         self.position = position
-        self.is_collect = False
 
 
 class Syringe(Movable):
     """ For collectable parts of syringe : Aether, Tube, Needle. """
-
     count_collect = 0
+
+    def __init__(self, position):
+        """ Manage collect """
+        super().__init__(position)
+        self.is_collect = False
 
     def collect(self):
         """ When MacGyver walk on piece of syringe. """
