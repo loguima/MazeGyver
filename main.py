@@ -9,7 +9,7 @@ if __name__ == "__main__":
     maze_window = MazeWindow(Maze(15, 15), 40, 40)
     # key = kind of items / path / True if transparency image
     pictures_to_load = {"A": ("img/Aether.png", True), "B": ("img/Begin.png", True), "E": ("img/Exit.png", True),
-                        "G": ("img/Guardian.png", True),"M": ("img/MacGyver.png", True),"N": ("img/Needle.png", True),
+                        "G": ("img/Guardian.png", True), "M": ("img/MacGyver.png", True), "N": ("img/Needle.png", True),
                         "T": ("img/Tube.png", True), "W": ("img/Wall.png", False), ".": ("img/Floor.png", False)}
     maze_window.load_pictures(pictures_to_load)
     maze_window.fill_with_pictures()
