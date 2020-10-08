@@ -20,7 +20,7 @@ Gére les positions, les déplacements, les élements (mobiles ou non).
 (1) Type d'élément :
     A = Aether, B = Begin, E = Exit, G = Guardian, M = MacGyver, N = Needle, T = Tube, W = Wall, . = sol
     
-## Classe MazeWindow.
+## Classe Window.
 
 Affiche ce que lui donne la classe Maze et gére les événements clavier.
 

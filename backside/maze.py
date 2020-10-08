@@ -3,8 +3,9 @@
 
 import random
 
-from Movable import Movable, Syringe
-from Constantes import *
+from backside.movable import Movable
+from backside.syringe import Syringe
+from common.constantes import *
 
 
 class Maze:
@@ -22,7 +23,7 @@ class Maze:
     def create_irremovable_part(self):
         """ Transforms the content of the file into the dictionary "free_way". """
 
-        with open("res/maze.txt", "r") as maze_file:
+        with open("backside/res/maze.txt", "r") as maze_file:
             for y, line in enumerate(maze_file):
                 for x, column in enumerate(line.strip()):
                     if column != WALL:
@@ -55,7 +56,7 @@ class Maze:
 
     def give_random_position(self, authorized_places):
         """ Give random position of free place. """
-        free_place = (random.randint(0, len(authorized_places)-1))
+        free_place = (random.randint(0, len(authorized_places) - 1))
         return list(authorized_places)[free_place]  # Position in the converted dictionary in list
 
     def create_character(self, kind, position):

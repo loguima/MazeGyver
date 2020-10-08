@@ -1,14 +1,8 @@
 #! /usr/bin/env python3
 # coding: utf8
 
-from Constantes import *
-
-class Movable:
-    """ Create movable item """
-
-    def __init__(self, position):
-        """ Store position """
-        self.position = position
+from backside.movable import Movable
+from common.constantes import *
 
 
 class Syringe(Movable):

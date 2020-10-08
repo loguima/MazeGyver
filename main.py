@@ -1,12 +1,12 @@
 #! /usr/bin/env python3
 # coding: utf8
 
-from Maze import *
-from MazeWindow import *
+from backside.maze import *
+from frontside.window import *
 
 if __name__ == "__main__":
-    # MazeWindow is driven by Maze
-    maze_window = MazeWindow(Maze())
+    # Window is driven by Maze
+    maze_window = Window(Maze())
     maze_window.load_pictures()
     maze_window.fill_with_pictures()
     maze_window.add_movable_pictures()

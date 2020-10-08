@@ -20,7 +20,7 @@ WALL = 'W'
 # HOW MANY PIECES TO COMPLETE SYRINGE
 NUMBER_TO_COLLECT = 3
 
-# Status at the end of game
+# Status after a move
 FREE_FLOOR = 0
 NO_SYRINGE = 1
 FILLED_SYRINGE = 2
