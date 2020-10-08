@@ -10,11 +10,9 @@ from Constantes import *
 class Maze:
     """ Determine the content of the labyrinth, i.e. the kind of items and their positions """
 
-    def __init__(self, size_x, size_y):
+    def __init__(self):
         """ The maze have two parts : irremovable (wall, floor, ...) and movable (characters, items, ...)? """
 
-        self.size_x = size_x
-        self.size_y = size_y
         self.free_way = {}  # Contains the free way (no walls) where movable items can evoluate.
         self.create_irremovable_part()
         self.movable = {}  # Contains the references of movable objects (object in the sense of Python).
@@ -27,9 +25,9 @@ class Maze:
         with open("res/maze.txt", "r") as maze_file:
             for y, line in enumerate(maze_file):
                 for x, column in enumerate(line.strip()):
-                    if column != "W":
+                    if column != WALL:
                         self.free_way[(x, y)] = column
-                        if column == "E":
+                        if column == EXIT:
                             exit_position = (x, y)
 
         loop = True
@@ -39,28 +37,26 @@ class Maze:
             # Otherwise the Guardian is on Begin and Mac on Start ==> Mac is immediately killed.
             if position != exit_position:
                 loop = False
-        self.free_way[position] = "B"
+        self.free_way[position] = BEGIN
 
     def create_movable_part(self):
         """ Give position and create movable items """
         self.authorized_places = self.free_way.copy()  # Where a new movable item can be placed
 
         for position in self.free_way:
-            if self.free_way[position] == "E":
-                self.create_character("G", position)  # Guardian's position is same as Exit
-            elif self.free_way[position] == "B":
-                self.create_character("M", position)  # MacGyver's position is same as Begin
+            if self.free_way[position] == EXIT:
+                self.create_character(GUARDIAN, position)  # Guardian's position is same as Exit
+            elif self.free_way[position] == BEGIN:
+                self.create_character(MAC_GYVER, position)  # MacGyver's position is same as Begin
 
-        self.create_syringe("N")  # Random position for Needle, Tube, Aether
-        self.create_syringe("T")
-        self.create_syringe("A")
+        self.create_syringe(NEEDLE)  # Random position for Needle, Tube, Aether
+        self.create_syringe(TUBE)
+        self.create_syringe(AETHER)
 
     def give_random_position(self, authorized_places):
-        """ Give random position if free place. """
-        position = (random.randint(0, self.size_x - 1), random.randint(0, self.size_y - 1))
-        if position not in authorized_places:
-            return self.give_random_position(authorized_places)
-        return position
+        """ Give random position of free place. """
+        free_place = (random.randint(0, len(authorized_places)-1))
+        return list(authorized_places)[free_place]  # Position in the converted dictionary in list
 
     def create_character(self, kind, position):
         """ Create a movable and indicate that the place is not free for deposit other movable """
@@ -75,7 +71,7 @@ class Maze:
 
     def move_macgyver(self, movement):
         """ If free position, move MacGyver, collect if Syringe item, check proximity of guardian """
-        macgyver = self.movable["M"]
+        macgyver = self.movable[MAC_GYVER]
         old_position = macgyver.position
         new_position = (old_position[0] + movement[0], old_position[1] + movement[1])
         if not (new_position in self.free_way):
@@ -96,7 +92,7 @@ class Maze:
 
     def check_guardian_proximity(self, new_position):
         """ Check the guardian proximity. If near, check if syringe is complete """
-        guardian = self.movable["G"]
+        guardian = self.movable[GUARDIAN]
         for (x, y) in {(0, 1), (0, -1), (1, 0), (-1, 0)}:
             position_to_test = (new_position[0] + x, new_position[1] + y)
             if position_to_test == guardian.position:

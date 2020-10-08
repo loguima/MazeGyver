@@ -12,20 +12,24 @@ pygame.init()
 class MazeWindow:
     """ Draw what give the maze object, i.e. the kind of items and their positions"""
 
-    def __init__(self, maze, width_picture, height_picture):
+    def __init__(self, maze):
         """ Initialize the elements necessary for what will be visible. """
-        self.width_picture = width_picture
-        self.height_picture = height_picture
-        self.width_window = self.width_picture * maze.size_x
-        self.height_window = self.height_picture * maze.size_y
-
         self.maze = maze
-        self.window = pygame.display.set_mode((self.width_window, self.height_window))
 
+        self.window_width = PIC_WIDTH * MAZE_WIDTH
+        self.window_height = PIC_HEIGHT * MAZE_HEIGHT
+        self.window = pygame.display.set_mode((self.window_width, self.window_height))
         self.images = {}
 
-    def load_pictures(self, pictures_to_load):
+    def load_pictures(self):
         """ Load pictures into dictionary. Key is kind of elements and content is pygame image """
+        # key = kind of items / path / True if transparency image
+        pictures_to_load = {
+            AETHER: ("img/Aether.png", True), BEGIN: ("img/Begin.png", True), EXIT: ("img/Exit.png", True),
+            FLOOR: ("img/Floor.png", False), GUARDIAN: ("img/Guardian.png", True),
+            MAC_GYVER: ("img/MacGyver.png", True),
+            NEEDLE: ("img/Needle.png", True), TUBE: ("img/Tube.png", True), WALL: ("img/Wall.png", False)
+        }
         for kind in pictures_to_load:
             self.images[kind] = self.load_picture(pictures_to_load[kind][1], pictures_to_load[kind][0])
 
@@ -37,9 +41,9 @@ class MazeWindow:
 
     def fill_with_pictures(self):
         """ Fill with the pictures of irremovable part (wall, floor, exit, begin)"""
-        for position in [(x, y) for x in range(self.maze.size_x) for y in range(self.maze.size_y)]:
+        for position in [(x, y) for x in range(MAZE_WIDTH) for y in range(MAZE_HEIGHT)]:
             if position not in self.maze.free_way:
-                kind = "W"
+                kind = WALL
             else:
                 kind = self.maze.free_way[position]
             self.blit(kind, position)
@@ -47,7 +51,7 @@ class MazeWindow:
     def blit(self, kind, position):
         """ Blit : copy pixels of image (a surface) onto the window (another surface), at the given position. """
         (x, y) = position
-        self.window.blit(self.images[kind], (x * self.width_picture, y * self.height_picture))
+        self.window.blit(self.images[kind], (x * PIC_WIDTH, y * PIC_HEIGHT))
 
     def add_movable_pictures(self):
         """ Draw the pictures of the mobile elements (MacGyver, Guardian, syringe's parts. """
@@ -57,7 +61,7 @@ class MazeWindow:
 
     def display(self):
         """ Display the pygame window """
-        pygame.display.set_icon(self.images["M"])
+        pygame.display.set_icon(self.images[MAC_GYVER])
         pygame.display.set_caption("Maze Gyver")
 
         # Don't use flip(), the game must run on different OS, they don't always support hardware acceleration.
@@ -65,20 +69,16 @@ class MazeWindow:
 
     def survey_events(self):
         """ Monitors keyboard events. If arrows, start MacGyver's move """
+        # Use the arrows to move
+        movement = {K_UP: (0, -1), K_DOWN: (0, 1), K_LEFT: (-1, 0), K_RIGHT: (1, 0)}
         loop = True
         while loop:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     loop = False
                 elif event.type == KEYDOWN:
-                    if event.key == K_UP:
-                        loop = self.move_macgyver((0, -1))
-                    if event.key == K_DOWN:
-                        loop = self.move_macgyver((0, 1))
-                    if event.key == K_LEFT:
-                        loop = self.move_macgyver((-1, 0))
-                    if event.key == K_RIGHT:
-                        loop = self.move_macgyver((1, 0))
+                    if event.key in movement:
+                        loop = self.move_macgyver(movement[event.key])
 
         pygame.quit()
 
@@ -93,7 +93,7 @@ class MazeWindow:
 
         kind = self.maze.free_way[new_position]
         self.blit(kind, new_position)  # Restore the soil if position was occupied by piece of syringe
-        self.blit("M", new_position)  # Place MacGyver
+        self.blit(MAC_GYVER, new_position)  # Place MacGyver
 
         pygame.display.update()
 
@@ -103,12 +103,12 @@ class MazeWindow:
             self.kill()
             return False
         if status == FILLED_SYRINGE:  # Meet guardian and have syringe
-            guardian_position = self.maze.movable["G"].position
+            guardian_position = self.maze.movable[GUARDIAN].position
             kind = self.maze.free_way[guardian_position]
             self.blit(kind, guardian_position)  # Made Guardian go to rest
             self.win()
             return False
-        return True  # status == 0: Movement on free floor
+        return True  # status == FREE_FLOOR
 
     def kill(self):
         """ In case of defeat. """
@@ -134,7 +134,7 @@ class MazeWindow:
             self.window.blit(text, position)
         pygame.display.update()
         loop = True
-        while loop:
+        while loop:  # The displayed text must have time to be seen
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     loop = False

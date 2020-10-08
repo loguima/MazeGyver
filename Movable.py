@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 # coding: utf8
 
+from Constantes import *
 
 class Movable:
     """ Create movable item """
@@ -32,6 +33,6 @@ class Syringe(Movable):
     @classmethod
     def is_complete(cls):
         """ Syringe is complete when Aether, Tube and Needle have been collect. """
-        if cls.count_collect == 3:
+        if cls.count_collect == NUMBER_TO_COLLECT:
             return True
         return False
