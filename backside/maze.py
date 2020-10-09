@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 # coding: utf8
 
+import os
 import random
 
 from backside.movable import Movable
@@ -20,10 +21,12 @@ class Maze:
         self.create_movable_part()
         self.authorized_places = {}  # Contains where next movable item can be place.
 
+        print(Syringe._count_collect)
+
     def create_irremovable_part(self):
         """ Transforms the content of the file into the dictionary "free_way". """
 
-        with open("backside/res/maze.txt", "r") as maze_file:
+        with open((os.path.dirname(__file__) + "/res/maze.txt"), "r") as maze_file:
             for y, line in enumerate(maze_file):
                 for x, column in enumerate(line.strip()):
                     if column != WALL:
